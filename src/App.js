@@ -1,24 +1,31 @@
-import logo from './logo.svg';
+
+import {useState} from 'react'
+import axios from 'axios'
 import './App.css';
 
 function App() {
+  const [thought, setThought] = useState('Nothing is impossible!');
+
+  const onClickHandler = () => {
+    axios.get('https://api.adviceslip.com/advice')
+      .then((response) => {       
+        const { advice } = response.data.slip;
+        setThought(advice);
+      })
+      .catch((error) => {
+        console.log(error);
+      });    
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className="app">
+        <div className="card">
+          <h1 className="heading">{thought}</h1>
+          <button className="button" onClick={onClickHandler}>
+            <span>THOUGHT OF THE DAY!</span>
+          </button>
+        </div>
+      </div>
   );
 }
 
